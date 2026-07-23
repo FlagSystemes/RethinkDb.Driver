@@ -1,10 +1,10 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
+using RethinkDb.Driver.Ast;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using RethinkDb.Driver.Ast;
 using Random = System.Random;
 
 namespace RethinkDb.Driver.Net.Clustering
@@ -106,7 +106,7 @@ namespace RethinkDb.Driver.Net.Clustering
                 .Select(i => i / Convert.ToSingle(EpsilonBuckets))
                 .ToArray();
 
-            if( autoStartDecayTimer )
+            if (autoStartDecayTimer)
             {
                 StartDecayTimer();
             }
@@ -166,9 +166,9 @@ namespace RethinkDb.Driver.Net.Clustering
 
         internal void PerformEpsilonGreedyDecay(object state)
         {
-            lock( hostLock )
+            lock (hostLock)
             {
-                if( shuttingDown )
+                if (shuttingDown)
                 {
                     this.timer.Change(Timeout.Infinite, Timeout.Infinite);
                     this.timer.Dispose();
@@ -179,7 +179,7 @@ namespace RethinkDb.Driver.Net.Clustering
             //Parallel.For()
             //basically advance the index
             var hlist = this.hostList;
-            foreach( var h in hlist )
+            foreach (var h in hlist)
             {
                 var nextIndex = (h.EpsilonIndex + 1) % EpsilonBuckets;
                 h.EpsilonCounts[nextIndex] = 0; //write ahead, before other threads
@@ -195,7 +195,7 @@ namespace RethinkDb.Driver.Net.Clustering
                 //that threads have advanced to the new epsilon index bucket
                 var prevIndex = (currentIndex - 1) % EpsilonBuckets;
                 var averages = h.EpsilonAvg;
-                if( h.EpsilonCounts[prevIndex] > 0 )
+                if (h.EpsilonCounts[prevIndex] > 0)
                 {
                     averages[prevIndex] = h.EpsilonValues[prevIndex] / Convert.ToSingle(h.EpsilonCounts[prevIndex]);
                 }
@@ -210,10 +210,10 @@ namespace RethinkDb.Driver.Net.Clustering
 
             //this is our exploration phase
             var rand = Random.NextDouble();
-            if( rand < this.epsilon )
+            if (rand < this.epsilon)
             {
                 this.epsilon = this.epsilon * EpsilonDecay;
-                if( this.epsilon < MinEpsilon )
+                if (this.epsilon < MinEpsilon)
                 {
                     this.epsilon = MinEpsilon;
                 }
@@ -225,13 +225,13 @@ namespace RethinkDb.Driver.Net.Clustering
             var ceiling = 0.0d;
 
             //find best.
-            for( var i = 0; i < hlist.Length; i++ )
+            for (var i = 0; i < hlist.Length; i++)
             {
                 var h = hlist[i];
-                if( !h.Dead && h.EpsilonWeightAverage > 0 )
+                if (!h.Dead && h.EpsilonWeightAverage > 0)
                 {
                     ceiling += h.EpsilonPercentage;
-                    if( rand <= ceiling )
+                    if (rand <= ceiling)
                     {
                         hostToUse = h;
                         break;
@@ -239,7 +239,7 @@ namespace RethinkDb.Driver.Net.Clustering
                 }
             }
 
-            if( hostToUse == null || hostToUse.Dead )
+            if (hostToUse == null || hostToUse.Dead)
             {
                 return this.GetRoundRobin();
             }
@@ -254,13 +254,13 @@ namespace RethinkDb.Driver.Net.Clustering
             var prevIndex = (h.EpsilonIndex - 1) % EpsilonBuckets; //capture the current index
 
             //start from 2, skipping the current epsilon index
-            for( var i = 2; i <= EpsilonBuckets; i++ )
+            for (var i = 2; i <= EpsilonBuckets; i++)
             {
                 var pos = (prevIndex + i) % EpsilonBuckets;
                 var counts = h.EpsilonCounts[pos];
                 // Changing the line below to what I think it should be to get the weights right
                 var weight = weights[i - 1];
-                if( counts > 0 )
+                if (counts > 0)
                 {
                     //the average 
                     //var currentValue = h.EpsilonValues[pos] / Convert.ToSingle(counts);
@@ -298,22 +298,22 @@ namespace RethinkDb.Driver.Net.Clustering
             var sumValues = 0f;
 
             // calculate values for each host in the 0..1 range (but not normalized)
-            for( int i = 0; i < hlist.Length; i++ )
+            for (int i = 0; i < hlist.Length; i++)
             {
                 var h = hlist[i];
                 SetWeightedAverageResponseTime(h);
                 SetEpsilonValue(h);
-                if( !h.Dead && h.EpsilonWeightAverage > 0 )
+                if (!h.Dead && h.EpsilonWeightAverage > 0)
                 {
                     sumValues += h.EpsilonValue;
                 }
             }
             //now normalize the 0..1 range to get percentage
             //need to know the sum before normalizing
-            for( int i = 0; i < hlist.Length; i++ )
+            for (int i = 0; i < hlist.Length; i++)
             {
                 var h = hlist[i];
-                if( !h.Dead && h.EpsilonWeightAverage > 0 )
+                if (!h.Dead && h.EpsilonWeightAverage > 0)
                 {
                     h.EpsilonPercentage = h.EpsilonValue / sumValues;
                 }
@@ -333,7 +333,7 @@ namespace RethinkDb.Driver.Net.Clustering
                 MarkSuccess(host, start, end);
                 return result;
             }
-            catch( Exception e ) when( ExceptionIs.NetworkError(e) )
+            catch (Exception e) when (ExceptionIs.NetworkError(e))
             {
                 host.MarkFailed();
                 throw;
@@ -351,7 +351,7 @@ namespace RethinkDb.Driver.Net.Clustering
                 MarkSuccess(host, start, end);
                 return result;
             }
-            catch( Exception e ) when( ExceptionIs.NetworkError(e) )
+            catch (Exception e) when (ExceptionIs.NetworkError(e))
             {
                 host.MarkFailed();
                 throw;
@@ -369,7 +369,7 @@ namespace RethinkDb.Driver.Net.Clustering
                 MarkSuccess(host, start, end);
                 return result;
             }
-            catch( Exception e ) when( ExceptionIs.NetworkError(e) )
+            catch (Exception e) when (ExceptionIs.NetworkError(e))
             {
                 host.MarkFailed();
                 throw;
@@ -386,7 +386,7 @@ namespace RethinkDb.Driver.Net.Clustering
                 var end = DateTime.Now.Ticks;
                 MarkSuccess(host, start, end);
             }
-            catch( Exception e ) when( ExceptionIs.NetworkError(e) )
+            catch (Exception e) when (ExceptionIs.NetworkError(e))
             {
                 host.MarkFailed();
                 throw;
@@ -404,7 +404,7 @@ namespace RethinkDb.Driver.Net.Clustering
                 MarkSuccess(host, start, end);
                 return result;
             }
-            catch( Exception e ) when( ExceptionIs.NetworkError(e) )
+            catch (Exception e) when (ExceptionIs.NetworkError(e))
             {
                 host.MarkFailed();
                 throw;

@@ -7,8 +7,10 @@
 #pragma warning disable 1591
 // ReSharper disable CheckNamespace
 
-namespace RethinkDb.Driver.Proto {
-    public enum QueryType {
+namespace RethinkDb.Driver.Proto
+{
+    public enum QueryType
+    {
         START = 1,
         CONTINUE = 2,
         STOP = 3,
@@ -16,6 +18,6 @@ namespace RethinkDb.Driver.Proto {
         SERVER_INFO = 5,
     }
 
-    
+
 
 }

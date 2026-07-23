@@ -1,6 +1,6 @@
-﻿using System.Reflection;
+﻿using Newtonsoft.Json.Serialization;
 using RethinkDb.Driver.Net;
-using Newtonsoft.Json.Serialization;
+using System.Reflection;
 
 namespace RethinkDb.Driver.Utils
 {
@@ -15,18 +15,18 @@ namespace RethinkDb.Driver.Utils
         /// </summary>
         public static string GetJsonMemberName(MemberInfo member)
         {
-            if ( !(Converter.Serializer?.ContractResolver is DefaultContractResolver contractResolver) )
+            if (!(Converter.Serializer?.ContractResolver is DefaultContractResolver contractResolver))
             {
                 return member.Name;
             }
 
             var namingStrategy = contractResolver.NamingStrategy;
-            if ( namingStrategy == null )
+            if (namingStrategy == null)
             {
                 return member.Name;
             }
 
-            return namingStrategy.GetPropertyName( member.Name, false );
+            return namingStrategy.GetPropertyName(member.Name, false);
         }
     }
 }

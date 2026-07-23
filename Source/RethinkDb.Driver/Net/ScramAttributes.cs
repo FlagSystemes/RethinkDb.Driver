@@ -1,5 +1,5 @@
-using System;
 using RethinkDb.Driver.Utils;
+using System;
 
 namespace RethinkDb.Driver.Net
 {
@@ -22,30 +22,30 @@ namespace RethinkDb.Driver.Net
         public static ScramAttributes From(ScramAttributes other)
         {
             var obj = new ScramAttributes
-                {
-                    AuthIdentity = other.AuthIdentity,
-                    Username = other.Username,
-                    Nonce = other.Nonce,
-                    HeaderAndChannelBinding = other.HeaderAndChannelBinding,
-                    Salt = other.Salt,
-                    IterationCount = other.IterationCount,
-                    ClientProof = other.ClientProof,
-                    ServerSignature = other.ServerSignature,
-                    Error = other.Error
-                };
+            {
+                AuthIdentity = other.AuthIdentity,
+                Username = other.Username,
+                Nonce = other.Nonce,
+                HeaderAndChannelBinding = other.HeaderAndChannelBinding,
+                Salt = other.Salt,
+                IterationCount = other.IterationCount,
+                ClientProof = other.ClientProof,
+                ServerSignature = other.ServerSignature,
+                Error = other.Error
+            };
             return obj;
         }
 
         public static ScramAttributes From(string input)
         {
             var sa = new ScramAttributes
-                {
-                    OriginalString = input
-                };
-
-            foreach( string section in input.Split(','))
             {
-                string[] keyVal = section.Split(new[] {'='}, 2);
+                OriginalString = input
+            };
+
+            foreach (string section in input.Split(','))
+            {
+                string[] keyVal = section.Split(new[] { '=' }, 2);
                 sa.SetAttribute(keyVal[0], keyVal[1]);
             }
             return sa;
@@ -53,7 +53,7 @@ namespace RethinkDb.Driver.Net
 
         private void SetAttribute(string key, string val)
         {
-            switch( key )
+            switch (key)
             {
                 case "a":
                     this.AuthIdentity = val;
@@ -84,34 +84,34 @@ namespace RethinkDb.Driver.Net
                 case "e":
                     this.Error = val;
                     break;
-                // Supposed to ignore unexpected fields
+                    // Supposed to ignore unexpected fields
             }
         }
 
         public override string ToString()
         {
-            if( this.OriginalString.IsNotNullOrEmpty() )
+            if (this.OriginalString.IsNotNullOrEmpty())
             {
                 return OriginalString;
             }
             string output = "";
-            if( this.Username.IsNotNullOrEmpty() )
+            if (this.Username.IsNotNullOrEmpty())
             {
                 output += ",n=" + this.Username;
             }
-            if( this.Nonce.IsNotNullOrEmpty() )
+            if (this.Nonce.IsNotNullOrEmpty())
             {
                 output += ",r=" + this.Nonce;
             }
-            if( this.HeaderAndChannelBinding.IsNotNullOrEmpty() )
+            if (this.HeaderAndChannelBinding.IsNotNullOrEmpty())
             {
                 output += ",c=" + this.HeaderAndChannelBinding;
             }
-            if( this.ClientProof.IsNotNullOrEmpty() )
+            if (this.ClientProof.IsNotNullOrEmpty())
             {
                 output += ",p=" + this.ClientProof;
             }
-            if( output.StartsWith(",") )
+            if (output.StartsWith(","))
             {
                 return output.Substring(1);
             }

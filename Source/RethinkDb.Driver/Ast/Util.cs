@@ -1,8 +1,8 @@
+using Newtonsoft.Json.Linq;
+using RethinkDb.Driver.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using RethinkDb.Driver.Model;
 
 namespace RethinkDb.Driver.Ast
 {
@@ -21,55 +21,55 @@ namespace RethinkDb.Driver.Ast
         {
             var converted = ToReqlAst(val);
             var reqlAst = converted as ReqlExpr;
-            if( !ReferenceEquals(reqlAst, null) )
+            if (!ReferenceEquals(reqlAst, null))
             {
                 return reqlAst;
             }
             throw new ReqlDriverError($"Cannot convert {val} to ReqlExpr");
         }
 
-        private static ReqlAst ToReqlAst(object val, int remainingDepth, Func<object, ReqlAst> hook = null )
+        private static ReqlAst ToReqlAst(object val, int remainingDepth, Func<object, ReqlAst> hook = null)
         {
-            if( remainingDepth <= 0 )
+            if (remainingDepth <= 0)
             {
                 throw new ReqlDriverCompileError("Recursion limit reached converting to ReqlAst");
             }
-            if( hook != null )
+            if (hook != null)
             {
                 var converted = hook(val);
-                if( !ReferenceEquals(converted, null) )
+                if (!ReferenceEquals(converted, null))
                 {
                     return converted;
                 }
             }
             var ast = val as ReqlAst;
-            if( !ReferenceEquals(ast, null) )
+            if (!ReferenceEquals(ast, null))
             {
                 return ast;
             }
 
-            if( val is JToken token )
+            if (val is JToken token)
             {
                 return new Poco(token);
             }
 
-            if( val is IList lst )
+            if (val is IList lst)
             {
                 Arguments innerValues = new Arguments();
-                foreach( object innerValue in lst )
+                foreach (object innerValue in lst)
                 {
                     innerValues.Add(ToReqlAst(innerValue, remainingDepth - 1));
                 }
                 return new MakeArray(innerValues, null);
             }
 
-            if( val is IDictionary dict )
+            if (val is IDictionary dict)
             {
                 var obj = new Dictionary<string, ReqlAst>();
-                foreach( var keyObj in dict.Keys )
+                foreach (var keyObj in dict.Keys)
                 {
                     var key = keyObj as string;
-                    if( key == null )
+                    if (key == null)
                     {
                         throw new ReqlDriverCompileError("Object keys can only be strings");
                     }
@@ -79,44 +79,44 @@ namespace RethinkDb.Driver.Ast
                 return MakeObj.fromMap(obj);
             }
 
-            if( val is Delegate del )
+            if (val is Delegate del)
             {
                 return Func.FromLambda(del);
             }
 
             var dt = val as DateTime?;
-            if( dt != null )
+            if (dt != null)
             {
                 return new Poco(dt);
             }
             var dto = val as DateTimeOffset?;
-            if( dto != null )
+            if (dto != null)
             {
                 return new Poco(dto);
             }
 
             var @int = val as int?;
-            if( @int != null )
+            if (@int != null)
             {
                 return new Datum(@int);
             }
 
-            if( IsNumber(val) )
+            if (IsNumber(val))
             {
                 return new Datum(val);
             }
 
             var @bool = val as bool?;
-            if( @bool != null )
+            if (@bool != null)
             {
                 return new Datum(@bool);
             }
 
-            if( val is string str )
+            if (val is string str)
             {
                 return new Datum(str);
             }
-            if( val == null )
+            if (val == null)
             {
                 return new Datum(null);
             }

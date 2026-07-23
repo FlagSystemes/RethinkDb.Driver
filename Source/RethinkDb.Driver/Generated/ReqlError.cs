@@ -8,30 +8,34 @@
 #pragma warning disable 1591
 // ReSharper disable CheckNamespace
 
-using System;
-using RethinkDb.Driver.Model;
 using RethinkDb.Driver.Ast;
+using RethinkDb.Driver.Model;
+using System;
 
-namespace RethinkDb.Driver {
-    public class ReqlError : Exception {
+namespace RethinkDb.Driver
+{
+    public class ReqlError : Exception
+    {
 
-            public Backtrace Backtrace { get; set; }
-            public ReqlAst Term { get; set; }
+        public Backtrace Backtrace { get; set; }
+        public ReqlAst Term { get; set; }
 
-        public ReqlError () {
-        }
-
-        public ReqlError (Exception e) : this(e.Message, e) {
-        }
-
-        public ReqlError (string message) : base(message)
+        public ReqlError()
         {
         }
 
-        public ReqlError (string message, Exception innerException) : base(message, innerException)
+        public ReqlError(Exception e) : this(e.Message, e)
         {
         }
-        
-        
+
+        public ReqlError(string message) : base(message)
+        {
+        }
+
+        public ReqlError(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+
     }
 }

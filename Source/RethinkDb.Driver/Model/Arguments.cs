@@ -1,9 +1,9 @@
 #pragma warning disable 1591 // Missing XML comment for publicly visible type or member
 
+using RethinkDb.Driver.Ast;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using RethinkDb.Driver.Ast;
 
 namespace RethinkDb.Driver.Model
 {
@@ -16,7 +16,7 @@ namespace RethinkDb.Driver.Model
         public Arguments(object arg)
         {
             var list = arg as IList;
-            if( list != null )
+            if (list != null)
             {
                 this.CoerceAndAddAll(list);
             }
@@ -59,7 +59,7 @@ namespace RethinkDb.Driver.Model
 
         public void CoerceAndAddAll(ICollection list)
         {
-            foreach( var item in list )
+            foreach (var item in list)
             {
                 this.Add(Util.ToReqlAst(item));
             }

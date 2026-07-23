@@ -7,8 +7,10 @@
 #pragma warning disable 1591
 // ReSharper disable CheckNamespace
 
-namespace RethinkDb.Driver.Proto {
-    public enum TermType {
+namespace RethinkDb.Driver.Proto
+{
+    public enum TermType
+    {
         DATUM = 1,
         MAKE_ARRAY = 2,
         MAKE_OBJ = 3,
@@ -197,6 +199,6 @@ namespace RethinkDb.Driver.Proto {
         BIT_SAR = 196,
     }
 
-    
+
 
 }

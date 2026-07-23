@@ -27,7 +27,7 @@ namespace RethinkDb.Driver.Net
         /// The enabled security protocols to use over the socket. Default: TLS, TLS 1.1, TLS 1.2.
         /// SSLv2 and SSLv3 are considered insecure.
         /// </summary>
-        public SslProtocols EnabledProtocols { get; set; } = 
+        public SslProtocols EnabledProtocols { get; set; } =
             SslProtocols.Tls | SslProtocols.Tls11 | SslProtocols.Tls12;
 
         /// <summary>

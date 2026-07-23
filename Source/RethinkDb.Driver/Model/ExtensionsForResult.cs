@@ -11,7 +11,7 @@ namespace RethinkDb.Driver.Model
         /// <exception cref="ReqlAssertFailure">Thrown when the assertion applies</exception>
         public static Result AssertNoErrors(this Result result)
         {
-            if( result.Errors > 0 )
+            if (result.Errors > 0)
             {
                 throw new ReqlAssertFailure(result.FirstError);
             }
@@ -24,7 +24,7 @@ namespace RethinkDb.Driver.Model
         /// <exception cref="ReqlAssertFailure">Thrown when the assertion applies</exception>
         public static Result AssertDeleted(this Result result, ulong deleted)
         {
-            if( result.Deleted != deleted )
+            if (result.Deleted != deleted)
             {
                 throw AssertFail(nameof(AssertDeleted), result.Deleted, deleted);
             }
@@ -38,7 +38,7 @@ namespace RethinkDb.Driver.Model
         /// <exception cref="ReqlAssertFailure">Thrown when the assertion applies</exception>
         public static Result AssertInserted(this Result result, ulong inserted)
         {
-            if( result.Inserted != inserted )
+            if (result.Inserted != inserted)
             {
                 throw AssertFail(nameof(AssertInserted), result.Inserted, inserted);
             }
@@ -52,7 +52,7 @@ namespace RethinkDb.Driver.Model
         /// <exception cref="ReqlAssertFailure">Thrown when the assertion applies</exception>
         public static Result AssertReplaced(this Result result, ulong replaced)
         {
-            if( result.Replaced != replaced )
+            if (result.Replaced != replaced)
             {
                 throw AssertFail(nameof(AssertReplaced), result.Replaced, replaced);
             }
@@ -66,7 +66,7 @@ namespace RethinkDb.Driver.Model
         /// <exception cref="ReqlAssertFailure">Thrown when the assertion applies</exception>
         public static Result AssertSkipped(this Result result, ulong skipped)
         {
-            if( result.Skipped != skipped )
+            if (result.Skipped != skipped)
             {
                 throw AssertFail(nameof(AssertSkipped), result.Skipped, skipped);
             }
@@ -80,7 +80,7 @@ namespace RethinkDb.Driver.Model
         /// <exception cref="ReqlAssertFailure">Thrown when the assertion applies</exception>
         public static Result AssertUnchanged(this Result result, ulong unchanged)
         {
-            if( result.Unchanged != unchanged )
+            if (result.Unchanged != unchanged)
             {
                 throw AssertFail(nameof(AssertUnchanged), result.Unchanged, unchanged);
             }
@@ -94,7 +94,7 @@ namespace RethinkDb.Driver.Model
         /// <exception cref="ReqlAssertFailure">Thrown when the assertion applies</exception>
         public static Result AssertTablesCreated(this Result result, ulong tablesCreated)
         {
-            if( result.TablesCreated != tablesCreated )
+            if (result.TablesCreated != tablesCreated)
             {
                 throw AssertFail(nameof(AssertTablesCreated), result.TablesCreated, tablesCreated);
             }
@@ -108,7 +108,7 @@ namespace RethinkDb.Driver.Model
         /// <exception cref="ReqlAssertFailure">Thrown when the assertion applies</exception>
         public static Result AssertTablesDropped(this Result result, ulong tablesDropped)
         {
-            if( result.TablesDropped != tablesDropped )
+            if (result.TablesDropped != tablesDropped)
             {
                 throw AssertFail(nameof(AssertTablesDropped), result.TablesDropped, tablesDropped);
             }
@@ -122,7 +122,7 @@ namespace RethinkDb.Driver.Model
         /// <exception cref="ReqlAssertFailure">Thrown when the assertion applies</exception>
         public static Result AssertDatabasesCreated(this Result result, ulong databasesCreated)
         {
-            if( result.DatabasesCreated != databasesCreated )
+            if (result.DatabasesCreated != databasesCreated)
             {
                 throw AssertFail(nameof(AssertDatabasesCreated), result.DatabasesCreated, databasesCreated);
             }
@@ -137,7 +137,7 @@ namespace RethinkDb.Driver.Model
         /// <exception cref="ReqlAssertFailure">Thrown when the assertion applies</exception>
         public static Result AssertDatabasesDropped(this Result result, ulong databasesDropped)
         {
-            if( result.DatabasesDropped != databasesDropped )
+            if (result.DatabasesDropped != databasesDropped)
             {
                 throw AssertFail(nameof(AssertDatabasesDropped), result.DatabasesDropped, databasesDropped);
             }

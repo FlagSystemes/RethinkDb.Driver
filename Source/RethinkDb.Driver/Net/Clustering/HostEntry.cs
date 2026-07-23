@@ -52,7 +52,7 @@ namespace RethinkDb.Driver.Net.Clustering
 
         public virtual void MarkFailed()
         {
-            if( !this.Dead )
+            if (!this.Dead)
             {
                 this.RetryCount = 0;
                 this.RetryDelay = this.RetryDelayInitial;

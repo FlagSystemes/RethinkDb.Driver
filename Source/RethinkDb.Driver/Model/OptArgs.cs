@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using RethinkDb.Driver.Ast;
+using System.Collections.Generic;
 
 namespace RethinkDb.Driver.Model
 {
@@ -13,7 +13,7 @@ namespace RethinkDb.Driver.Model
         /// </summary>
         public virtual OptArgs With(string key, object value)
         {
-            if( key != null )
+            if (key != null)
             {
                 this[key] = Util.ToReqlAst(value);
             }
@@ -30,7 +30,7 @@ namespace RethinkDb.Driver.Model
         /// </summary>
         public virtual OptArgs With(string key, IList<object> value)
         {
-            if( key != null )
+            if (key != null)
             {
                 this[key] = Util.ToReqlAst(value);
             }
@@ -49,7 +49,7 @@ namespace RethinkDb.Driver.Model
         public virtual OptArgs With(object anonType)
         {
             var anonDict = PropertyHelper.ObjectToDictionary(anonType);
-            foreach( var kvp in anonDict )
+            foreach (var kvp in anonDict)
             {
                 this.with(kvp.Key, kvp.Value);
             }
@@ -67,7 +67,7 @@ namespace RethinkDb.Driver.Model
         /// </summary>
         public virtual OptArgs With(OptArgs args)
         {
-            foreach( var kvp in args )
+            foreach (var kvp in args)
                 this.with(kvp.Key, kvp.Value);
 
             return this;
@@ -81,7 +81,7 @@ namespace RethinkDb.Driver.Model
         {
             OptArgs oa = new OptArgs();
 
-            foreach( var kvp in map )
+            foreach (var kvp in map)
                 oa.Add(kvp.Key, kvp.Value);
 
             return oa;

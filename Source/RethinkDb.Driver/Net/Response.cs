@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RethinkDb.Driver.Ast;
 using RethinkDb.Driver.Model;
 using RethinkDb.Driver.Proto;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace RethinkDb.Driver.Net
 {
@@ -68,7 +68,7 @@ namespace RethinkDb.Driver.Net
         public static Response ParseFrom(long token, string buf)
         {
             //we check here because it's possibly very expensive to ship this buf around in the call stack
-            if( Log.IsTraceEnabled ) Log.Trace($"JSON Recv: Token: {token}, JSON: {buf}");
+            if (Log.IsTraceEnabled) Log.Trace($"JSON Recv: Token: {token}, JSON: {buf}");
 
             var jsonResp = ParseJson(buf);
             var responseType = jsonResp[TypeKey].ToObject<ResponseType>();
@@ -79,21 +79,21 @@ namespace RethinkDb.Driver.Net
             var backtrace = Backtrace.FromJsonArray((JArray)jsonResp[BacktraceKey]);
 
             var res = new Response(token, responseType)
-                {
-                    ErrorType = et,
-                    Profile = profile,
-                    Backtrace = backtrace,
-                    Data = (JArray)jsonResp[DataKey] ?? new JArray(),
-                    Notes = responseNotes
-                };
+            {
+                ErrorType = et,
+                Profile = profile,
+                Backtrace = backtrace,
+                Data = (JArray)jsonResp[DataKey] ?? new JArray(),
+                Notes = responseNotes
+            };
 
             return res;
         }
 
         private static JObject ParseJson(string buf)
         {
-            using( var reader = new JsonTextReader(new StringReader(buf)) )
-            {                
+            using (var reader = new JsonTextReader(new StringReader(buf)))
+            {
                 return Converter.Serializer.Deserialize<JObject>(reader);
             }
         }

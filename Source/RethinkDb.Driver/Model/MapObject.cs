@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using RethinkDb.Driver.Ast;
+using System.Collections.Generic;
 
 namespace RethinkDb.Driver.Model
 {
@@ -29,7 +29,7 @@ namespace RethinkDb.Driver.Model
         public virtual MapObject With(object anonType)
         {
             var anonDict = PropertyHelper.ObjectToDictionary(anonType);
-            foreach( var kvp in anonDict )
+            foreach (var kvp in anonDict)
             {
                 this.With(kvp.Key, kvp.Value);
             }

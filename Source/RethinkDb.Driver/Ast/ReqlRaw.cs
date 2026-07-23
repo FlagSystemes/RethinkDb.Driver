@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RethinkDb.Driver.Proto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using RethinkDb.Driver.Model;
-using RethinkDb.Driver.Proto;
 
 namespace RethinkDb.Driver.Ast
 {
@@ -90,13 +89,13 @@ namespace RethinkDb.Driver.Ast
             return query;
         }
 
-		/// <summary>
-		/// Convert a raw protocol string into an AST term that will
-		/// be injected when the AST is serialized.
-		/// </summary>
-		/// <param name="reqlRawString">The raw protocol string to inject</param>
-		/// <returns>A raw AST term</returns>
-		public static ReqlRaw FromRawString(string reqlRawString)
+        /// <summary>
+        /// Convert a raw protocol string into an AST term that will
+        /// be injected when the AST is serialized.
+        /// </summary>
+        /// <param name="reqlRawString">The raw protocol string to inject</param>
+        /// <returns>A raw AST term</returns>
+        public static ReqlRaw FromRawString(string reqlRawString)
         {
             var query = HydrateProtocolString(reqlRawString);
             return new ReqlRaw(query);
@@ -106,7 +105,7 @@ namespace RethinkDb.Driver.Ast
         private static ReqlAst HookFuncTypes(object val, List<Guid> context)
         {
             var del = val as Delegate;
-            if( del != null )
+            if (del != null)
             {
                 return Func.Serialize(del, context);
             }

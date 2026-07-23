@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RethinkDb.Driver.Net.JsonConverters;
-using RethinkDb.Driver.Utils;
+using System;
+using System.Linq;
 
 namespace RethinkDb.Driver.Net
 {
@@ -50,7 +48,7 @@ namespace RethinkDb.Driver.Net
         /// </summary>
         public static JsonSerializer Serializer { get; set; }
 
-     
+
         /// <summary>
         /// DateTime converter to/from ReQL pseudo types
         /// </summary>

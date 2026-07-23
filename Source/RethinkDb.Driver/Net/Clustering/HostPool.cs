@@ -1,9 +1,9 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
+using RethinkDb.Driver.Ast;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using RethinkDb.Driver.Ast;
 
 namespace RethinkDb.Driver.Net.Clustering
 {
@@ -22,8 +22,8 @@ namespace RethinkDb.Driver.Net.Clustering
             this.RetryDelayInitial = retryDelayInitial ?? TimeSpan.FromSeconds(30);
             this.RetryDelayMax = retryDelayMax ?? TimeSpan.FromSeconds(900);
 
-            if( this.RetryDelayInitial < TimeSpan.FromSeconds(30)
-                || this.RetryDelayMax < TimeSpan.FromSeconds(30) )
+            if (this.RetryDelayInitial < TimeSpan.FromSeconds(30)
+                || this.RetryDelayMax < TimeSpan.FromSeconds(30))
             {
                 throw new ArgumentOutOfRangeException(
                     $"{nameof(retryDelayInitial)} and {nameof(retryDelayMax)} must both be greater than 30 seconds. Anything less can cause threads to pile up on each other because the default socket timeout for windows is about 20 seconds.");
@@ -38,9 +38,9 @@ namespace RethinkDb.Driver.Net.Clustering
 
         public virtual void AddHost(string host, Connection conn)
         {
-            lock( hostLock )
+            lock (hostLock)
             {
-                if( shuttingDown ) return;
+                if (shuttingDown) return;
 
                 var oldHostList = this.hostList;
                 var nextHostList = new HostEntry[oldHostList.Length + 1];
@@ -49,12 +49,12 @@ namespace RethinkDb.Driver.Net.Clustering
                 //add new host to the end of the array. Initially, start off as a dead
                 //host.
                 var he = new HostEntry(host)
-                    {
-                        conn = conn,
-                        Dead = true,
-                        RetryDelayInitial = RetryDelayInitial,
-                        RetryDelayMax = RetryDelayMax
-                    };
+                {
+                    conn = conn,
+                    Dead = true,
+                    RetryDelayInitial = RetryDelayInitial,
+                    RetryDelayMax = RetryDelayMax
+                };
                 nextHostList[nextHostList.Length - 1] = he;
                 this.hostList = nextHostList;
             }
@@ -64,7 +64,7 @@ namespace RethinkDb.Driver.Net.Clustering
 
         public virtual void Shutdown()
         {
-            lock( hostLock )
+            lock (hostLock)
             {
                 shuttingDown = true;
             }

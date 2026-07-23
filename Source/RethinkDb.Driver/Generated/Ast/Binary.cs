@@ -19,59 +19,62 @@
 #pragma warning disable 1591 // Missing XML comment for publicly visible type or member
 // ReSharper disable CheckNamespace
 
-using System;
-using RethinkDb.Driver.Ast;
+using Newtonsoft.Json.Linq;
 using RethinkDb.Driver.Model;
+using RethinkDb.Driver.Net;
 using RethinkDb.Driver.Proto;
-using System.Collections;
-using System.Collections.Generic;
-
-    using RethinkDb.Driver.Net;
-    using Newtonsoft.Json.Linq;
+using System;
 
 
-namespace RethinkDb.Driver.Ast {
+namespace RethinkDb.Driver.Ast
+{
 
-    public partial class Binary : ReqlExpr {
-
-    
-    byte[] b64Data = null;
-
-    
-    
-    public Binary (byte[] bytes) : this(new Arguments()){
-        b64Data = bytes;
-    }
-    public Binary (Object arg) : this(new Arguments(arg), null) {
-        
-    }
-    public Binary (Arguments args) : this(args, null){
-
-    }
-    public Binary (Arguments args, OptArgs optargs) : this(TermType.BINARY, args, optargs) {
-        
-    }
-    protected Binary (TermType termType, Arguments args, OptArgs optargs) : base(termType, args, optargs){
-        
-    }
+    public partial class Binary : ReqlExpr
+    {
 
 
-    
-    
+        byte[] b64Data = null;
 
 
-    
+
+        public Binary(byte[] bytes) : this(new Arguments())
+        {
+            b64Data = bytes;
+        }
+        public Binary(Object arg) : this(new Arguments(arg), null)
+        {
+
+        }
+        public Binary(Arguments args) : this(args, null)
+        {
+
+        }
+        public Binary(Arguments args, OptArgs optargs) : this(TermType.BINARY, args, optargs)
+        {
+
+        }
+        protected Binary(TermType termType, Arguments args, OptArgs optargs) : base(termType, args, optargs)
+        {
+
+        }
 
 
-    
 
-    
+
+
+
+
+
+
+
+
+
         /// <summary>
         /// Get a single field from an object. If called on a sequence, gets that field from every object in the sequence, skipping objects that lack it.
         /// </summary>
         /// <param name="bracket"></param>
         public new Bracket this[string bracket] => base[bracket];
-        
+
         /// <summary>
         /// Get the nth element of a sequence, counting from zero. If the argument is negative, count from the last element.
         /// </summary>
@@ -80,7 +83,6 @@ namespace RethinkDb.Driver.Ast {
         public new Bracket this[int bracket] => base[bracket];
 
 
-    
 
 
 
@@ -95,19 +97,23 @@ namespace RethinkDb.Driver.Ast {
 
 
 
-    
-    
-        protected internal override object Build() {
-            if( b64Data != null){
+
+
+
+        protected internal override object Build()
+        {
+            if (b64Data != null)
+            {
                 return JObject.FromObject(b64Data, Converter.Serializer);
             }
-            else{
+            else
+            {
                 return base.Build();
             }
         }
 
 
 
-    
+
     }
 }

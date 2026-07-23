@@ -61,7 +61,7 @@ namespace RethinkDb.Driver
         /// </summary>
         public static void Trace(string msg)
         {
-            if( IsTraceEnabled )
+            if (IsTraceEnabled)
             {
 #if STANDARD
                 Instance?.LogDebug(Filter(msg));
@@ -77,7 +77,7 @@ namespace RethinkDb.Driver
         public static void Debug(string msg)
         {
 
-            if( IsDebugEnabled )
+            if (IsDebugEnabled)
             {
 #if STANDARD
                 Instance?.LogDebug(Filter(msg));
@@ -107,23 +107,23 @@ namespace RethinkDb.Driver
             const string BinaryStart = @"{""$reql_type$"":""BINARY"",""data"":""";
             const string BinaryEnd = @"""}";
 
-            if ( TruncateBinaryTypes )
+            if (TruncateBinaryTypes)
             {
                 int bookmark = 0;
 
                 StringBuilder sb = null;
-                while ( bookmark < msg.Length )
+                while (bookmark < msg.Length)
                 {
                     var match = msg.IndexOf(BinaryStart, bookmark, StringComparison.Ordinal);
-                    if( match == -1 && sb == null)
+                    if (match == -1 && sb == null)
                     {
                         return msg;
                     }
-                    if( match != -1 && sb == null )
+                    if (match != -1 && sb == null)
                     {
                         sb = new StringBuilder();
                     }
-                    if( match == -1 && sb != null )
+                    if (match == -1 && sb != null)
                     {
                         sb.Append(msg.Substring(bookmark));
                         return sb.ToString();
@@ -131,7 +131,7 @@ namespace RethinkDb.Driver
                     var end = msg.IndexOf(BinaryEnd, match, StringComparison.Ordinal);
 
 
-                    sb.Append(msg.Substring(bookmark, (match + BinaryStart.Length) - bookmark ));
+                    sb.Append(msg.Substring(bookmark, (match + BinaryStart.Length) - bookmark));
                     sb.Append("BASE64_STRING_TRUNCATED_BY_LOG");
                     sb.Append(msg.Substring(end, BinaryEnd.Length));
                     bookmark = end + BinaryEnd.Length;

@@ -1,9 +1,9 @@
+using Newtonsoft.Json.Linq;
+using RethinkDb.Driver.Net;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
-using RethinkDb.Driver.Net;
 
 namespace RethinkDb.Driver.Model
 {
@@ -24,7 +24,7 @@ namespace RethinkDb.Driver.Model
         {
             this.Key = key.ToObject<TKey>(Converter.Serializer);
             var value = item.ToObject<TElement>(Converter.Serializer);
-            this.Items = new List<TElement>() {value};
+            this.Items = new List<TElement>() { value };
         }
 
         public IEnumerator<TElement> GetEnumerator()

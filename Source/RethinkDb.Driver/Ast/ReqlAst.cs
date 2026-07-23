@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using RethinkDb.Driver.Model;
 using RethinkDb.Driver.Net;
 using RethinkDb.Driver.Proto;
 using RethinkDb.Driver.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RethinkDb.Driver.Ast
 {
@@ -33,7 +33,7 @@ namespace RethinkDb.Driver.Ast
             // Create a JSON object from the Ast
             JArray list = new JArray();
             list.Add(TermType);
-            if( Args.Count > 0 )
+            if (Args.Count > 0)
             {
                 var collect = Args.Select(a => { return a.Build(); });
                 list.Add(new JArray(collect));
@@ -43,7 +43,7 @@ namespace RethinkDb.Driver.Ast
                 list.Add(new JArray());
             }
 
-            if( OptArgs.Count > 0 )
+            if (OptArgs.Count > 0)
             {
                 list.Add(BuildOptarg(this.OptArgs));
             }

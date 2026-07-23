@@ -34,7 +34,7 @@ namespace RethinkDb.Driver.Ast
         protected internal override object Build()
         {
             JToken token;
-            using( var writer = new PocoWriter() )
+            using (var writer = new PocoWriter())
             {
                 Converter.Serializer.Serialize(writer, this.obj);
                 token = writer.Token;

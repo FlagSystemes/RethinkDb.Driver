@@ -1,6 +1,6 @@
+using RethinkDb.Driver.Utils;
 using System;
 using System.Security.Cryptography;
-using RethinkDb.Driver.Utils;
 
 namespace RethinkDb.Driver.Net
 {

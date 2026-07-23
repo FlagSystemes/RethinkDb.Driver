@@ -9,27 +9,29 @@
 // ReSharper disable CheckNamespace
 
 using System;
-using RethinkDb.Driver.Model;
-using RethinkDb.Driver.Ast;
 
-namespace RethinkDb.Driver {
-    public class ReqlDriverCompileError : ReqlCompileError {
+namespace RethinkDb.Driver
+{
+    public class ReqlDriverCompileError : ReqlCompileError
+    {
 
 
-        public ReqlDriverCompileError () {
-        }
-
-        public ReqlDriverCompileError (Exception e) : this(e.Message, e) {
-        }
-
-        public ReqlDriverCompileError (string message) : base(message)
+        public ReqlDriverCompileError()
         {
         }
 
-        public ReqlDriverCompileError (string message, Exception innerException) : base(message, innerException)
+        public ReqlDriverCompileError(Exception e) : this(e.Message, e)
         {
         }
-        
-        
+
+        public ReqlDriverCompileError(string message) : base(message)
+        {
+        }
+
+        public ReqlDriverCompileError(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+
     }
 }

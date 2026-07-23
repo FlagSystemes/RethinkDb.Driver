@@ -1,7 +1,7 @@
+using RethinkDb.Driver.Ast;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using RethinkDb.Driver.Ast;
 
 namespace RethinkDb.Driver.Net
 {

@@ -7,12 +7,14 @@
 #pragma warning disable 1591
 // ReSharper disable CheckNamespace
 
-namespace RethinkDb.Driver.Proto {
-    public enum FrameType {
+namespace RethinkDb.Driver.Proto
+{
+    public enum FrameType
+    {
         POS = 1,
         OPT = 2,
     }
 
-    
+
 
 }

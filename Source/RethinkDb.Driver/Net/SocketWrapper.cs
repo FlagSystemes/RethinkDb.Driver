@@ -1,3 +1,4 @@
+using RethinkDb.Driver.Utils;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
@@ -7,7 +8,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using RethinkDb.Driver.Utils;
 
 namespace RethinkDb.Driver.Net
 {
@@ -28,7 +28,7 @@ namespace RethinkDb.Driver.Net
         private SslContext sslContext;
 
         private SslStream ssl = null;
-    
+
         public SocketWrapper(string hostname, int port, TimeSpan? timeout, SslContext sslContext, Action<Exception> errorCallback)
         {
             this.hostname = hostname;
@@ -38,7 +38,7 @@ namespace RethinkDb.Driver.Net
 
             this.timeout = timeout ?? TimeSpan.FromSeconds(60);
         }
-        
+
         private Exception currentException;
 
         public virtual async Task ConnectAsync(Handshake handshake)
@@ -72,7 +72,7 @@ namespace RethinkDb.Driver.Net
 
                 this.bw = new BinaryWriter(this.ssl as Stream ?? this.ns);
                 this.br = new BinaryReader(this.ssl as Stream ?? this.ns);
-                
+
 
                 // execute RethinkDB handshake
                 ExecuteHandshake(handshake);
@@ -114,12 +114,12 @@ namespace RethinkDb.Driver.Net
         private static async Task<Socket> ConnectInternalAsync(IPAddress[] addresses, int port)
         {
             Exception lastExc = null;
-            foreach( var address in addresses )
+            foreach (var address in addresses)
             {
                 var s = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp)
-                    {
-                        NoDelay = true
-                    };
+                {
+                    NoDelay = true
+                };
                 s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
                 try
                 {
@@ -136,14 +136,14 @@ namespace RethinkDb.Driver.Net
 #endif
                     return s;
                 }
-                catch( Exception exc )
+                catch (Exception exc)
                 {
                     lastExc = exc;
                     s.Dispose();
                 }
             }
 
-            if( lastExc != null ) throw lastExc;
+            if (lastExc != null) throw lastExc;
             throw new ArgumentException("No addresses provided", nameof(addresses));
         }
 
@@ -166,7 +166,7 @@ namespace RethinkDb.Driver.Net
 
         public virtual void Connect(Handshake handshake)
         {
-            if( !ConnectAsync(handshake).Wait(this.timeout) )
+            if (!ConnectAsync(handshake).Wait(this.timeout))
             {
                 try
                 {
@@ -185,11 +185,11 @@ namespace RethinkDb.Driver.Net
 
             var sb = new StringBuilder();
             char c;
-            while( (c = this.br.ReadChar()) != '\0' )
+            while ((c = this.br.ReadChar()) != '\0')
             {
-                if( deadlineInstant.HasValue )
+                if (deadlineInstant.HasValue)
                 {
-                    if( deadlineInstant <= DateTime.Now )
+                    if (deadlineInstant <= DateTime.Now)
                     {
                         throw new ReqlDriverError("Connection timed out.");
                     }
@@ -209,14 +209,14 @@ namespace RethinkDb.Driver.Net
         /// </summary>
         private void ResponsePump()
         {
-            while( true )
+            while (true)
             {
-                if( pump.IsCancellationRequested )
+                if (pump.IsCancellationRequested)
                 {
                     Log.Trace("Response Pump: shutting down. Cancel is requested.");
                     break;
                 }
-                if( this.Closed )
+                if (this.Closed)
                 {
                     Log.Trace("Response Pump: The connected socket is not open. Response Loop exiting.");
                     break;
@@ -229,17 +229,17 @@ namespace RethinkDb.Driver.Net
                     //http://blog.i3arnon.com/2015/07/02/task-run-long-running/
                     var response = this.Read();
                     Awaiter awaitingTask;
-                    if( awaiters.TryRemove(response.Token, out awaitingTask) )
+                    if (awaiters.TryRemove(response.Token, out awaitingTask))
                     {
                         Task.Run(() =>
                             {
                                 //regardless of the outcome, clean up any registered
                                 //cancellation tokens with using statement.
-                                using ( awaitingTask )
+                                using (awaitingTask)
                                 {
                                     //try setting the result, because it's possible
                                     //the awaiting task was canceled.
-                                    if( !awaitingTask.TrySetResult(response) )
+                                    if (!awaitingTask.TrySetResult(response))
                                     {
                                         Log.Debug(
                                             $"Response Pump: The awaiter waiting for response token {response.Token} could not be set. The task was probably canceled.");
@@ -255,7 +255,7 @@ namespace RethinkDb.Driver.Net
                         //I guess we'll ignore for now, perhaps a cursor was killed
                     }
                 }
-                catch( Exception e )
+                catch (Exception e)
                 {
                     currentException = e;
                     this.errorCallback?.Invoke(currentException);
@@ -274,9 +274,9 @@ namespace RethinkDb.Driver.Net
 
             Log.Trace($"Cleaning up Response Pump awaiters for {hostname}:{port}");
             //clean up.
-            foreach( var a in awaiters.Values )
+            foreach (var a in awaiters.Values)
             {
-                if( currentException != null )
+                if (currentException != null)
                 {
                     a.TrySetException(currentException);
                 }
@@ -308,18 +308,18 @@ namespace RethinkDb.Driver.Net
         {
             cancelToken.ThrowIfCancellationRequested();
 
-            if( this.Closed )
+            if (this.Closed)
             {
                 throw new ReqlDriverError($"Threads may not {nameof(SendQuery)} because the connection is closed.");
             }
 
-            if( pump.IsCancellationRequested )
+            if (pump.IsCancellationRequested)
             {
                 throw new ReqlDriverError($"Threads may not {nameof(SendQuery)} because the connection is shutting down.");
             }
 
             Awaiter awaiter = null;
-            if( awaitResponse )
+            if (awaitResponse)
             {
                 //Assign a new awaiter for this token,
                 //The caller is expecting a response.
@@ -327,7 +327,7 @@ namespace RethinkDb.Driver.Net
                 awaiters[token] = awaiter;
             }
 
-            lock( writeLock )
+            lock (writeLock)
             {
                 // Everyone can write their query as fast as they can; block if needed.
                 cancelToken.ThrowIfCancellationRequested();
@@ -347,7 +347,7 @@ namespace RethinkDb.Driver.Net
                     //we check here because it's possibly very expensive to ship this json around in the call stack
                     if (Log.IsTraceEnabled) Log.Trace($"JSON Send: Token: {token}, JSON: {json}");
                 }
-                catch( Exception e )
+                catch (Exception e)
                 {
                     currentException = e;
                     this.errorCallback?.Invoke(currentException);

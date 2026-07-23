@@ -7,8 +7,10 @@
 #pragma warning disable 1591
 // ReSharper disable CheckNamespace
 
-namespace RethinkDb.Driver.Proto {
-    public enum ResponseType {
+namespace RethinkDb.Driver.Proto
+{
+    public enum ResponseType
+    {
         SUCCESS_ATOM = 1,
         SUCCESS_SEQUENCE = 2,
         SUCCESS_PARTIAL = 3,
@@ -19,21 +21,24 @@ namespace RethinkDb.Driver.Proto {
         RUNTIME_ERROR = 18,
     }
 
-    
-       public static class ExtensionsForResponseType {
-            public static bool IsError(this ResponseType rtype){
-                 switch( rtype ){
-                        case ResponseType.CLIENT_ERROR:
-                            return true;
-                        case ResponseType.COMPILE_ERROR:
-                            return true;
-                        case ResponseType.RUNTIME_ERROR:
-                            return true;
-                    default:
-                        return false;
-                 }
+
+    public static class ExtensionsForResponseType
+    {
+        public static bool IsError(this ResponseType rtype)
+        {
+            switch (rtype)
+            {
+                case ResponseType.CLIENT_ERROR:
+                    return true;
+                case ResponseType.COMPILE_ERROR:
+                    return true;
+                case ResponseType.RUNTIME_ERROR:
+                    return true;
+                default:
+                    return false;
             }
-      }
+        }
+    }
 
 
 }

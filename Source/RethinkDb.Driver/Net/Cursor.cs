@@ -1,14 +1,13 @@
+using Newtonsoft.Json.Linq;
+using RethinkDb.Driver.Ast;
+using RethinkDb.Driver.Proto;
+using RethinkDb.Driver.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using RethinkDb.Driver.Ast;
-using RethinkDb.Driver.Model;
-using RethinkDb.Driver.Proto;
-using RethinkDb.Driver.Utils;
 
 namespace RethinkDb.Driver.Net
 {
@@ -145,19 +144,19 @@ namespace RethinkDb.Driver.Net
         public async Task<bool> MoveNextAsync(CancellationToken cancelToken = default)
         {
             cancelToken.ThrowIfCancellationRequested();
-            while( items.Count == 0 )
+            while (items.Count == 0)
             {
-                if( !this.IsOpen ) return false;
+                if (!this.IsOpen) return false;
 
                 //our buffer is empty, we need to expect the next batch of items.
 
-                if( !this.pendingContinue.IsCompleted )
+                if (!this.pendingContinue.IsCompleted)
                 {
                     //the next batch isn't here yet. so,
                     //let's await and honor the cancelToken.
 
                     //create a task that is controlled by the token.
-                    using( var cancelTask = new CancellableTask(cancelToken) )
+                    using (var cancelTask = new CancellableTask(cancelToken))
                     {
                         //now await on either task, pending or the cancellation of the CancellableTask.
                         await Task.WhenAny(this.pendingContinue, cancelTask.Task).ConfigureAwait(false);
@@ -183,7 +182,7 @@ namespace RethinkDb.Driver.Net
 
         void MaybeSendContinue()
         {
-            if( this.IsOpen && this.conn.Open && pendingContinue == null && !sequenceFinished )
+            if (this.IsOpen && this.conn.Open && pendingContinue == null && !sequenceFinished)
             {
                 this.pendingContinue = this.conn.Continue(this);
             }
@@ -191,26 +190,26 @@ namespace RethinkDb.Driver.Net
 
         void ExtendBuffer(Response response)
         {
-            if( this.IsOpen )
+            if (this.IsOpen)
             {
-                if( response.IsPartial )
+                if (response.IsPartial)
                 {
                     //SUCCESS_PARTIAL
-                    foreach( var jToken in response.Data )
+                    foreach (var jToken in response.Data)
                     {
                         items.Enqueue(jToken);
                     }
                 }
-                else if( response.IsSequence )
+                else if (response.IsSequence)
                 {
                     //SUCCESS_SEQUENCE
-                    foreach( var jToken in response.Data )
+                    foreach (var jToken in response.Data)
                     {
                         items.Enqueue(jToken);
                     }
                     this.SequenceFinished();
                 }
-                else if ( response.IsError )
+                else if (response.IsError)
                 {
                     var ex = response.MakeError(query);
                     this.Shutdown(ex);
@@ -226,7 +225,7 @@ namespace RethinkDb.Driver.Net
 
         T Convert(JToken token)
         {
-            if( this.TIsJToken )
+            if (this.TIsJToken)
             {
                 Converter.ConvertPseudoTypes(token, fmt);
                 return (T)(object)token; //ugh ugly. find a better way to do this.

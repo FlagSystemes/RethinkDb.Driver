@@ -1,18 +1,15 @@
-using System;
-using System.Collections.Concurrent;
-using System.Net;
-using System.Net.Security;
-using System.Security.Authentication;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using RethinkDb.Driver.Ast;
 using RethinkDb.Driver.Model;
 using RethinkDb.Driver.Proto;
 using RethinkDb.Driver.Utils;
+using System;
+using System.Collections.Concurrent;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RethinkDb.Driver.Net
 {
@@ -40,7 +37,7 @@ namespace RethinkDb.Driver.Net
         internal Connection(Builder builder)
         {
             dbname = builder.dbname;
-            if( builder.authKey.IsNotNullOrEmpty() && builder.user.IsNotNullOrEmpty() )
+            if (builder.authKey.IsNotNullOrEmpty() && builder.user.IsNotNullOrEmpty())
             {
                 throw new ReqlDriverError("Either `authKey` or `user` can be used, but not both.");
             }
@@ -136,7 +133,7 @@ namespace RethinkDb.Driver.Net
         /// <exception cref="ReqlDriverError">Throws when the underlying socket is closed.</exception>
         public virtual void CheckOpen()
         {
-            if( !this.Socket?.Open ?? true )
+            if (!this.Socket?.Open ?? true)
             {
                 throw new ReqlDriverError("Connection is closed.");
             }
@@ -161,7 +158,7 @@ namespace RethinkDb.Driver.Net
         /// </summary>
         protected void CleanUpCursorCache(string message)
         {
-            foreach( var cursor in this.cursorCache.Values )
+            foreach (var cursor in this.cursorCache.Values)
             {
                 cursor.SetError(message);
             }
@@ -182,11 +179,11 @@ namespace RethinkDb.Driver.Net
         /// <param name="shouldNoReplyWait"><see cref="NoReplyWait"/></param>
         public virtual void Close(bool shouldNoReplyWait = true)
         {
-            if( this.Socket != null )
+            if (this.Socket != null)
             {
                 try
                 {
-                    if( shouldNoReplyWait )
+                    if (shouldNoReplyWait)
                     {
                         NoReplyWait();
                     }
@@ -230,7 +227,7 @@ namespace RethinkDb.Driver.Net
         public virtual async Task<Server> ServerAsync(CancellationToken cancelToken = default)
         {
             var response = await SendQuery(Query.ServerInfo(NewToken()), cancelToken, awaitResponse: true).ConfigureAwait(false);
-            if( response.Type == ResponseType.SERVER_INFO )
+            if (response.Type == ResponseType.SERVER_INFO)
             {
                 return response.Data[0].ToObject<Server>(Converter.Serializer);
             }
@@ -267,7 +264,7 @@ namespace RethinkDb.Driver.Net
         protected virtual async Task<Cursor<T>> RunQueryCursorAsync<T>(Query query, CancellationToken cancelToken)
         {
             var res = await SendQuery(query, cancelToken, awaitResponse: true).ConfigureAwait(false);
-            if( res.IsPartial || res.IsSequence )
+            if (res.IsPartial || res.IsSequence)
             {
                 return new Cursor<T>(this, query, res);
             }
@@ -289,27 +286,27 @@ namespace RethinkDb.Driver.Net
         protected virtual async Task<T> RunQueryAtomAsync<T>(Query query, CancellationToken cancelToken)
         {
             var res = await SendQuery(query, cancelToken, awaitResponse: true).ConfigureAwait(false);
-            if( res.IsAtom )
+            if (res.IsAtom)
             {
                 try
                 {
-                    if( typeof(T).IsJToken() )
+                    if (typeof(T).IsJToken())
                     {
-                        if( res.Data[0].Type == JTokenType.Null ) return (T)(object)null;
+                        if (res.Data[0].Type == JTokenType.Null) return (T)(object)null;
                         var fmt = FormatOptions.FromOptArgs(query.GlobalOptions);
                         Converter.ConvertPseudoTypes(res.Data[0], fmt);
                         return (T)(object)res.Data[0]; //ugh ugly. find a better way to do this.
                         //return res.Data[0].ToObject<T>();
                     }
                     return res.Data[0].ToObject<T>(Converter.Serializer);
-                    
+
                 }
-                catch( IndexOutOfRangeException ex )
+                catch (IndexOutOfRangeException ex)
                 {
                     throw new ReqlDriverError("Atom response was empty!", ex);
                 }
             }
-            if( res.IsError )
+            if (res.IsError)
             {
                 throw res.MakeError(query);
             }
@@ -324,27 +321,27 @@ namespace RethinkDb.Driver.Net
         private async Task<T> RunQueryResultAsync<T>(Query query, CancellationToken cancelToken)
         {
             var res = await SendQuery(query, cancelToken, awaitResponse: true).ConfigureAwait(false);
-            if( res.IsAtom )
+            if (res.IsAtom)
             {
                 try
                 {
-                    if( typeof(T).IsJToken() )
+                    if (typeof(T).IsJToken())
                     {
-                        if( res.Data[0].Type == JTokenType.Null ) return (T)(object)null;
+                        if (res.Data[0].Type == JTokenType.Null) return (T)(object)null;
                         var fmt = FormatOptions.FromOptArgs(query.GlobalOptions);
                         Converter.ConvertPseudoTypes(res.Data[0], fmt);
                         return (T)(object)res.Data[0]; //ugh ugly. find a better way to do this.
                     }
                     return res.Data[0].ToObject<T>(Converter.Serializer);
                 }
-                catch ( IndexOutOfRangeException ex )
+                catch (IndexOutOfRangeException ex)
                 {
                     throw new ReqlDriverError("Atom response was empty!", ex);
                 }
             }
-            if( res.IsSequence )
+            if (res.IsSequence)
             {
-                if( typeof(T).IsJToken() )
+                if (typeof(T).IsJToken())
                 {
                     var fmt = FormatOptions.FromOptArgs(query.GlobalOptions);
                     Converter.ConvertPseudoTypes(res.Data, fmt);
@@ -375,7 +372,7 @@ namespace RethinkDb.Driver.Net
         protected virtual async Task RunQueryWaitAsync(Query query, CancellationToken cancelToken)
         {
             var res = await SendQuery(query, cancelToken, awaitResponse: true).ConfigureAwait(false);
-            if( res.IsWaitComplete )
+            if (res.IsWaitComplete)
             {
                 return;
             }
@@ -405,29 +402,29 @@ namespace RethinkDb.Driver.Net
             //
             var res = await SendQuery(query, cancelToken, awaitResponse: true).ConfigureAwait(false);
 
-            if( res.IsAtom )
+            if (res.IsAtom)
             {
                 try
                 {
-                    if( typeof(T).IsJToken() )
+                    if (typeof(T).IsJToken())
                     {
-                        if( res.Data[0].Type == JTokenType.Null ) return null;
+                        if (res.Data[0].Type == JTokenType.Null) return null;
                         var fmt = FormatOptions.FromOptArgs(query.GlobalOptions);
                         Converter.ConvertPseudoTypes(res.Data[0], fmt);
                         return res.Data[0];
                     }
                     return res.Data[0].ToObject(typeof(T), Converter.Serializer);
                 }
-                catch ( IndexOutOfRangeException ex )
+                catch (IndexOutOfRangeException ex)
                 {
                     throw new ReqlDriverError("Atom response was empty!", ex);
                 }
             }
-            else if( res.IsPartial || res.IsSequence )
+            else if (res.IsPartial || res.IsSequence)
             {
                 return new Cursor<T>(this, query, res);
             }
-            else if( res.IsWaitComplete )
+            else if (res.IsWaitComplete)
             {
                 return null;
             }
@@ -442,7 +439,7 @@ namespace RethinkDb.Driver.Net
         /// </summary>
         protected Task<Response> SendQuery(Query query, CancellationToken cancelToken, bool awaitResponse)
         {
-            if( this.Socket == null ) throw new ReqlDriverError("No socket open.");
+            if (this.Socket == null) throw new ReqlDriverError("No socket open.");
             return this.Socket.SendQuery(query.Token, query.Serialize(), awaitResponse, cancelToken);
         }
 
@@ -453,7 +450,7 @@ namespace RethinkDb.Driver.Net
         {
             SetDefaultDb(globalOpts);
             Query q = Query.Start(NewToken(), term, globalOpts);
-            if( globalOpts?.ContainsKey("noreply") == true )
+            if (globalOpts?.ContainsKey("noreply") == true)
             {
                 throw new ReqlDriverError("Don't provide the noreply option as an optarg. Use `.RunNoReply` instead of `.Run`");
             }
@@ -465,13 +462,13 @@ namespace RethinkDb.Driver.Net
         /// </summary>
         protected void SetDefaultDb(OptArgs globalOpts)
         {
-            if( globalOpts?.ContainsKey("db") == false && this.dbname != null )
+            if (globalOpts?.ContainsKey("db") == false && this.dbname != null)
             {
                 // Only override the db global arg if the user hasn't
                 // specified one already and one is specified on the connection
                 globalOpts.With("db", this.dbname);
             }
-            if( globalOpts?.ContainsKey("db") == true )
+            if (globalOpts?.ContainsKey("db") == true)
             {
                 // The db arg must be wrapped in a db ast object
                 globalOpts.With("db", new Db(Arguments.Make(globalOpts["db"])));
@@ -544,7 +541,7 @@ namespace RethinkDb.Driver.Net
 
         internal void AddToCache(long token, ICursor cursor)
         {
-            if( this.Socket == null )
+            if (this.Socket == null)
                 throw new ReqlDriverError("Can't add to cache when not connected.");
             cursorCache[token] = cursor;
         }
@@ -552,7 +549,7 @@ namespace RethinkDb.Driver.Net
         internal void RemoveFromCache(long token)
         {
             ICursor removed;
-            if( !cursorCache.TryRemove(token, out removed) )
+            if (!cursorCache.TryRemove(token, out removed))
             {
                 Log.Trace($"Could not remove cursor token {token} from cursorCache.");
             }
@@ -687,12 +684,12 @@ namespace RethinkDb.Driver.Net
             var data = Encoding.UTF8.GetBytes(licenseTo);
 
             var rsaParameters = new RSAParameters
-                {
-                    Modulus = Convert.FromBase64String(modulusString),
-                    Exponent = Convert.FromBase64String(exponentString)
-                };
+            {
+                Modulus = Convert.FromBase64String(modulusString),
+                Exponent = Convert.FromBase64String(exponentString)
+            };
 #if STANDARD
-            using( var rsa = System.Security.Cryptography.RSA.Create() )
+            using (var rsa = System.Security.Cryptography.RSA.Create())
 #else
             using( var rsa = new System.Security.Cryptography.RSACryptoServiceProvider() )
 #endif
@@ -720,7 +717,7 @@ namespace RethinkDb.Driver.Net
                 licenseKey.StartsWith(
                     "tE4z+qpOuKWP4XfmAbnyepzI6m/qx2DaI+aDkMes94ujERmA7O6bb0100+LiClLymVLXYXNvkRBg7ot6NGlfyli/8x1h3IgL+HD8gFoWdTAN4oG8wE8ZyrFugnqmAHUDAy4h/KrOqB8VUXwGQh8Y/0ZxOBQb0KOaZJC/MUMbve8=");
 
-            if( isBanned ) throw new UnauthorizedAccessException("The license key has expired.");
+            if (isBanned) throw new UnauthorizedAccessException("The license key has expired.");
         }
     }
 }

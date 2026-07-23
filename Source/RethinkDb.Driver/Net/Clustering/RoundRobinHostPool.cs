@@ -1,9 +1,9 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
+using RethinkDb.Driver.Ast;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using RethinkDb.Driver.Ast;
 
 namespace RethinkDb.Driver.Net.Clustering
 {
@@ -47,13 +47,13 @@ namespace RethinkDb.Driver.Net.Clustering
         {
             var hostCount = this.hostList.Length; //thread capture
 
-            for( var i = 0; i < hostCount; i++ )
+            for (var i = 0; i < hostCount; i++)
             {
                 var next = Interlocked.Increment(ref nextHostIndex);
                 var currentIndex = next % hostCount;
 
                 var h = hostList[currentIndex];
-                if( !h.Dead )
+                if (!h.Dead)
                 {
                     return h;
                 }
@@ -71,7 +71,7 @@ namespace RethinkDb.Driver.Net.Clustering
             {
                 return await host.conn.RunAsync<T>(term, globalOpts, cancelToken).ConfigureAwait(false);
             }
-            catch( Exception e ) when( ExceptionIs.NetworkError(e) )
+            catch (Exception e) when (ExceptionIs.NetworkError(e))
             {
                 host.MarkFailed();
                 throw;
@@ -85,7 +85,7 @@ namespace RethinkDb.Driver.Net.Clustering
             {
                 return await host.conn.RunCursorAsync<T>(term, globalOpts, cancelToken).ConfigureAwait(false);
             }
-            catch( Exception e ) when( ExceptionIs.NetworkError(e) )
+            catch (Exception e) when (ExceptionIs.NetworkError(e))
             {
                 host.MarkFailed();
                 throw;
@@ -99,7 +99,7 @@ namespace RethinkDb.Driver.Net.Clustering
             {
                 return await host.conn.RunAtomAsync<T>(term, globalOpts, cancelToken).ConfigureAwait(false);
             }
-            catch( Exception e ) when( ExceptionIs.NetworkError(e) )
+            catch (Exception e) when (ExceptionIs.NetworkError(e))
             {
                 host.MarkFailed();
                 throw;
@@ -113,7 +113,7 @@ namespace RethinkDb.Driver.Net.Clustering
             {
                 return await host.conn.RunResultAsync<T>(term, globalOpts, cancelToken).ConfigureAwait(false);
             }
-            catch( Exception e ) when( ExceptionIs.NetworkError(e) )
+            catch (Exception e) when (ExceptionIs.NetworkError(e))
             {
                 host.MarkFailed();
                 throw;
@@ -127,7 +127,7 @@ namespace RethinkDb.Driver.Net.Clustering
             {
                 host.conn.RunNoReply(term, globalOpts);
             }
-            catch( Exception e ) when( ExceptionIs.NetworkError(e) )
+            catch (Exception e) when (ExceptionIs.NetworkError(e))
             {
                 host.MarkFailed();
                 throw;

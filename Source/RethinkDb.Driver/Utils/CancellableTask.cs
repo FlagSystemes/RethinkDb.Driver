@@ -1,9 +1,9 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
+using RethinkDb.Driver.Net;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using RethinkDb.Driver.Net;
 
 namespace RethinkDb.Driver.Utils
 {

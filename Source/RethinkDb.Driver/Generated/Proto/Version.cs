@@ -7,8 +7,10 @@
 #pragma warning disable 1591
 // ReSharper disable CheckNamespace
 
-namespace RethinkDb.Driver.Proto {
-    public enum Version {
+namespace RethinkDb.Driver.Proto
+{
+    public enum Version
+    {
         V0_1 = 1063369270,
         V0_2 = 1915781601,
         V0_3 = 1601562686,
@@ -16,6 +18,6 @@ namespace RethinkDb.Driver.Proto {
         V1_0 = 885177795,
     }
 
-    
+
 
 }

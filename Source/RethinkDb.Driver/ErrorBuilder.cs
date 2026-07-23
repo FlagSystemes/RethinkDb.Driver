@@ -39,7 +39,7 @@ namespace RethinkDb.Driver
         public virtual ReqlError Build()
         {
             ReqlError con;
-            switch( ResponseType )
+            switch (ResponseType)
             {
                 case Proto.ResponseType.CLIENT_ERROR:
                     con = new ReqlClientError(Msg);
@@ -48,39 +48,39 @@ namespace RethinkDb.Driver
                     con = new ReqlServerCompileError(Msg);
                     break;
                 case Proto.ResponseType.RUNTIME_ERROR:
-                {
-                    switch( ErrorType )
                     {
-                        case Proto.ErrorType.INTERNAL:
-                            con = new ReqlInternalError(Msg);
-                            break;
-                        case Proto.ErrorType.RESOURCE_LIMIT:
-                            con = new ReqlResourceLimitError(Msg);
-                            break;
-                        case Proto.ErrorType.QUERY_LOGIC:
-                            con = new ReqlQueryLogicError(Msg);
-                            break;
-                        case Proto.ErrorType.NON_EXISTENCE:
-                            con = new ReqlNonExistenceError(Msg);
-                            break;
-                        case Proto.ErrorType.OP_FAILED:
-                            con = new ReqlOpFailedError(Msg);
-                            break;
-                        case Proto.ErrorType.OP_INDETERMINATE:
-                            con = new ReqlOpIndeterminateError(Msg);
-                            break;
-                        case Proto.ErrorType.USER:
-                            con = new ReqlUserError(Msg);
-                            break;
-                        case Proto.ErrorType.PERMISSION_ERROR:
-                            con = new ReqlPermissionError(Msg);
-                            break;
-                        default:
-                            con = new ReqlRuntimeError(Msg);
-                            break;
+                        switch (ErrorType)
+                        {
+                            case Proto.ErrorType.INTERNAL:
+                                con = new ReqlInternalError(Msg);
+                                break;
+                            case Proto.ErrorType.RESOURCE_LIMIT:
+                                con = new ReqlResourceLimitError(Msg);
+                                break;
+                            case Proto.ErrorType.QUERY_LOGIC:
+                                con = new ReqlQueryLogicError(Msg);
+                                break;
+                            case Proto.ErrorType.NON_EXISTENCE:
+                                con = new ReqlNonExistenceError(Msg);
+                                break;
+                            case Proto.ErrorType.OP_FAILED:
+                                con = new ReqlOpFailedError(Msg);
+                                break;
+                            case Proto.ErrorType.OP_INDETERMINATE:
+                                con = new ReqlOpIndeterminateError(Msg);
+                                break;
+                            case Proto.ErrorType.USER:
+                                con = new ReqlUserError(Msg);
+                                break;
+                            case Proto.ErrorType.PERMISSION_ERROR:
+                                con = new ReqlPermissionError(Msg);
+                                break;
+                            default:
+                                con = new ReqlRuntimeError(Msg);
+                                break;
+                        }
+                        break;
                     }
-                    break;
-                }
                 default:
                     con = new ReqlError(Msg);
                     break;

@@ -15,7 +15,7 @@ namespace RethinkDb.Driver.Net
 
         public static byte[] Sha256(byte[] clientKey)
         {
-            using( var sha = new IncrementalSHA256() )
+            using (var sha = new IncrementalSHA256())
             {
                 sha.AppendData(clientKey);
                 return sha.GetHashAndReset();
@@ -24,7 +24,7 @@ namespace RethinkDb.Driver.Net
 
         public static byte[] Hmac(byte[] key, string str)
         {
-            using( var mac = new HMACSHA256(key) )
+            using (var mac = new HMACSHA256(key))
             {
                 return mac.ComputeHash(Encoding.UTF8.GetBytes(str));
             }
@@ -58,16 +58,16 @@ namespace RethinkDb.Driver.Net
             }
 */
 #if STANDARD
-            using( var macSalt = IncrementalHash.CreateHMAC(HashAlgorithmName.SHA256, password) )
+            using (var macSalt = IncrementalHash.CreateHMAC(HashAlgorithmName.SHA256, password))
 #endif
-            using ( var mac = new HMACSHA256(password) )
+            using (var mac = new HMACSHA256(password))
             {
 #if STANDARD
                 macSalt.AppendData(salt);
 #else
                 mac.TransformBlock(salt, 0, salt.Length, salt, 0);
 #endif
-                byte[] i = {0, 0, 0, 1};
+                byte[] i = { 0, 0, 0, 1 };
 #if STANDARD
                 macSalt.AppendData(i);
 #else
@@ -82,10 +82,10 @@ namespace RethinkDb.Driver.Net
 
                 byte[] u = t;
 
-                for( uint c = 2; c <= iterations; c++ )
+                for (uint c = 2; c <= iterations; c++)
                 {
                     t = mac.ComputeHash(t);
-                    for( int j = 0; j < mac.HashSize / 8; j++ )
+                    for (int j = 0; j < mac.HashSize / 8; j++)
                     {
                         u[j] ^= t[j];
                     }
@@ -105,7 +105,7 @@ namespace RethinkDb.Driver.Net
         public static byte[] Xor(byte[] a, byte[] b)
         {
             byte[] result = new byte[a.Length];
-            for( var i = 0; i < result.Length; i++ )
+            for (var i = 0; i < result.Length; i++)
                 result[i] = (byte)(a[i] ^ b[i]);
 
             return result;

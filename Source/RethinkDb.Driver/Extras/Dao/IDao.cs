@@ -7,13 +7,13 @@ namespace RethinkDb.Driver.Extras.Dao
     /// </summary>
     /// <typeparam name="T">Document entity</typeparam>
     /// <typeparam name="IdT">Type of Id property</typeparam>
-    public interface IDao<T, IdT> 
+    public interface IDao<T, IdT>
     {
         /// <summary>
         /// Get a document by Id.
         /// </summary>
         T GetById(IdT id);
-        
+
         /// <summary>
         /// Get a document by Id.
         /// </summary>
@@ -30,7 +30,7 @@ namespace RethinkDb.Driver.Extras.Dao
         /// </summary>
         /// <returns>Returns and deserializes the returned document</returns>
         T Save(T doc);
-        
+
         /// <summary>
         /// Save document. If the document exists, an exception will be thrown. Returns and deserializes the returned document.
         /// </summary>
@@ -63,7 +63,7 @@ namespace RethinkDb.Driver.Extras.Dao
         /// Deletes a document.
         /// </summary>
         void Delete(T doc);
-        
+
         /// <summary>
         /// Deletes a document.
         /// </summary>

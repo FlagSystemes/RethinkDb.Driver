@@ -1,7 +1,7 @@
 ﻿#pragma warning disable 1591 // Missing XML comment for publicly visible type or member
 
-using System;
 using RethinkDb.Driver.Net.JsonConverters;
+using System;
 
 namespace RethinkDb.Driver.Ast
 {

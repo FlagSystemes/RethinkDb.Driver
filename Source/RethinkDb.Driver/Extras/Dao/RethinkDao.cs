@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using RethinkDb.Driver.Ast;
+﻿using RethinkDb.Driver.Ast;
 using RethinkDb.Driver.Model;
 using RethinkDb.Driver.Net;
 using RethinkDb.Driver.Utils;
+using System.Threading.Tasks;
 
 namespace RethinkDb.Driver.Extras.Dao
 {
@@ -49,7 +49,7 @@ namespace RethinkDb.Driver.Extras.Dao
             this.TableName = tableName;
             this.Table = R.Db(dbName).Table(tableName);
 
-            this.returnChanges = new { return_changes = true};
+            this.returnChanges = new { return_changes = true };
         }
 
         /// <summary>

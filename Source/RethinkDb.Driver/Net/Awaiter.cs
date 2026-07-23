@@ -1,5 +1,5 @@
-using System.Threading;
 using RethinkDb.Driver.Utils;
+using System.Threading;
 
 namespace RethinkDb.Driver.Net
 {

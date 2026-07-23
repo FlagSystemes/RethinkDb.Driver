@@ -1,12 +1,12 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RethinkDb.Driver.Model;
 using RethinkDb.Driver.Utils;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace RethinkDb.Driver.Net.JsonConverters
 {
@@ -43,7 +43,7 @@ namespace RethinkDb.Driver.Net.JsonConverters
         {
             reader.ReadAndAssertProperty(Converter.PseudoTypeKey);
             var reql_type = reader.ReadAsString();
-            if( reql_type != Converter.GroupedData )
+            if (reql_type != Converter.GroupedData)
             {
                 throw new JsonSerializationException($"Expected {Converter.PseudoTypeKey} should be {Converter.GroupedData} but got {reql_type}.");
             }
@@ -56,7 +56,7 @@ namespace RethinkDb.Driver.Net.JsonConverters
             //... probably find a better way to do this.
             var genType = objectType.GetGenericTypeDefinition();
             IList list;
-            if( genType == typeof(GroupedResultSet<,>) )
+            if (genType == typeof(GroupedResultSet<,>))
             {
                 list = (IList)Activator.CreateInstance(objectType);
                 objectType = objectType.BaseType().GenericTypeArguments[0];
@@ -69,7 +69,7 @@ namespace RethinkDb.Driver.Net.JsonConverters
 
             var data = serializer.Deserialize<List<JArray>>(reader);
 
-            foreach( var group in data )
+            foreach (var group in data)
             {
                 var key = group[0]; //key, group value in common
                 var items = group[1]; //the grouped items
@@ -85,7 +85,7 @@ namespace RethinkDb.Driver.Net.JsonConverters
 
         public override bool CanConvert(Type objectType)
         {
-            if( objectType.IsGenericType() )
+            if (objectType.IsGenericType())
             {
                 var genType = objectType.GetGenericTypeDefinition();
                 return genType == typeof(GroupedResult<,>) ||

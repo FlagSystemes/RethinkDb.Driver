@@ -15,7 +15,7 @@ namespace RethinkDb.Driver.Model
 
         public static Backtrace FromJsonArray(JArray rawBacktrace)
         {
-            if( rawBacktrace == null || rawBacktrace.Count == 0 )
+            if (rawBacktrace == null || rawBacktrace.Count == 0)
             {
                 return null;
             }

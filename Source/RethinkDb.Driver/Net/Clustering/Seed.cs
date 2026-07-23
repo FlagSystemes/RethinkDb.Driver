@@ -20,7 +20,7 @@ namespace RethinkDb.Driver.Net.Clustering
         /// <summary>
         /// RethinkDB hostname
         /// </summary>
-        public string IpAddress { get;  }
+        public string IpAddress { get; }
 
         /// <summary>
         /// RethinkDB port

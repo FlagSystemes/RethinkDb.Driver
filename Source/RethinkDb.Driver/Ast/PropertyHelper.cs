@@ -47,7 +47,7 @@ namespace RethinkDb.Driver.Ast
         /// </summary>
         public PropertyHelper(PropertyInfo property)
         {
-            if( property == null )
+            if (property == null)
             {
                 throw new ArgumentNullException(nameof(property));
             }
@@ -79,7 +79,7 @@ namespace RethinkDb.Driver.Ast
         {
             get
             {
-                if( _valueSetter == null )
+                if (_valueSetter == null)
                 {
                     // We'll allow safe races here.
                     _valueSetter = MakeFastPropertySetter(Property);
@@ -234,7 +234,7 @@ namespace RethinkDb.Driver.Ast
             // Instance methods in the CLR can be turned into static methods where the first parameter
             // is open over "target". This parameter is always passed by reference, so we have a code
             // path for value types and a code path for reference types.
-            if( getMethod.DeclaringType.GetTypeInfo().IsValueType )
+            if (getMethod.DeclaringType.GetTypeInfo().IsValueType)
             {
                 // Create a delegate (ref TDeclaringType) -> TValue
                 return MakeFastPropertyGetter(
@@ -324,16 +324,16 @@ namespace RethinkDb.Driver.Ast
         public static IDictionary<string, object> ObjectToDictionary(object value)
         {
             var dictionary = value as IDictionary<string, object>;
-            if( dictionary != null )
+            if (dictionary != null)
             {
                 return new Dictionary<string, object>(dictionary, StringComparer.OrdinalIgnoreCase);
             }
 
             dictionary = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
-            if( value != null )
+            if (value != null)
             {
-                foreach( var helper in GetProperties(value) )
+                foreach (var helper in GetProperties(value))
                 {
                     dictionary[helper.Name] = helper.GetValue(value);
                 }
@@ -369,7 +369,7 @@ namespace RethinkDb.Driver.Ast
             Func<TDeclaringType, TValue> getter,
             object target)
         {
-            if( target == null )
+            if (target == null)
             {
                 return null;
             }
@@ -382,7 +382,7 @@ namespace RethinkDb.Driver.Ast
             ByRefFunc<TDeclaringType, TValue> getter,
             object target)
         {
-            if( target == null )
+            if (target == null)
             {
                 return null;
             }
@@ -406,7 +406,7 @@ namespace RethinkDb.Driver.Ast
             ConcurrentDictionary<Type, PropertyHelper[]> visiblePropertiesCache)
         {
             PropertyHelper[] result;
-            if( visiblePropertiesCache.TryGetValue(type, out result) )
+            if (visiblePropertiesCache.TryGetValue(type, out result))
             {
                 return result;
             }
@@ -414,16 +414,16 @@ namespace RethinkDb.Driver.Ast
             // The simple and common case, this is normal POCO object - no need to allocate.
             var allPropertiesDefinedOnType = true;
             var allProperties = GetProperties(type, createPropertyHelper, allPropertiesCache);
-            foreach( var propertyHelper in allProperties )
+            foreach (var propertyHelper in allProperties)
             {
-                if( propertyHelper.Property.DeclaringType != type )
+                if (propertyHelper.Property.DeclaringType != type)
                 {
                     allPropertiesDefinedOnType = false;
                     break;
                 }
             }
 
-            if( allPropertiesDefinedOnType )
+            if (allPropertiesDefinedOnType)
             {
                 result = allProperties;
                 visiblePropertiesCache.TryAdd(type, result);
@@ -432,10 +432,10 @@ namespace RethinkDb.Driver.Ast
 
             // There's some inherited properties here, so we need to check for hiding via 'new'.
             var filteredProperties = new List<PropertyHelper>(allProperties.Length);
-            foreach( var propertyHelper in allProperties )
+            foreach (var propertyHelper in allProperties)
             {
                 var declaringType = propertyHelper.Property.DeclaringType;
-                if( declaringType == type )
+                if (declaringType == type)
                 {
                     filteredProperties.Add(propertyHelper);
                     continue;
@@ -449,11 +449,11 @@ namespace RethinkDb.Driver.Ast
                 // PropertyInfo.
                 var currentTypeInfo = type.GetTypeInfo();
                 var declaringTypeInfo = declaringType.GetTypeInfo();
-                while( currentTypeInfo != null && currentTypeInfo != declaringTypeInfo )
+                while (currentTypeInfo != null && currentTypeInfo != declaringTypeInfo)
                 {
                     // We've found a 'more proximal' public definition
                     var declaredProperty = currentTypeInfo.GetDeclaredProperty(propertyHelper.Name);
-                    if( declaredProperty != null )
+                    if (declaredProperty != null)
                     {
                         ignoreProperty = true;
                         break;
@@ -462,7 +462,7 @@ namespace RethinkDb.Driver.Ast
                     currentTypeInfo = currentTypeInfo.BaseType?.GetTypeInfo();
                 }
 
-                if( !ignoreProperty )
+                if (!ignoreProperty)
                 {
                     filteredProperties.Add(propertyHelper);
                 }
@@ -483,13 +483,13 @@ namespace RethinkDb.Driver.Ast
             type = Nullable.GetUnderlyingType(type) ?? type;
 
             PropertyHelper[] helpers;
-            if( !cache.TryGetValue(type, out helpers) )
+            if (!cache.TryGetValue(type, out helpers))
             {
                 // We avoid loading indexed properties using the Where statement.
                 var properties = type.GetRuntimeProperties().Where(IsInterestingProperty);
 
                 var typeInfo = type.GetTypeInfo();
-                if( typeInfo.IsInterface )
+                if (typeInfo.IsInterface)
                 {
                     // Reflection does not return information about inherited properties on the interface itself.
                     properties = properties.Concat(typeInfo.ImplementedInterfaces.SelectMany(

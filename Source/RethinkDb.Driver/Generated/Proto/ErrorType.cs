@@ -7,8 +7,10 @@
 #pragma warning disable 1591
 // ReSharper disable CheckNamespace
 
-namespace RethinkDb.Driver.Proto {
-    public enum ErrorType {
+namespace RethinkDb.Driver.Proto
+{
+    public enum ErrorType
+    {
         INTERNAL = 1000000,
         RESOURCE_LIMIT = 2000000,
         QUERY_LOGIC = 3000000,
@@ -19,6 +21,6 @@ namespace RethinkDb.Driver.Proto {
         PERMISSION_ERROR = 6000000,
     }
 
-    
+
 
 }

@@ -1,8 +1,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-using System;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System;
 
 namespace RethinkDb.Driver.Net.JsonConverters
 {
@@ -15,14 +14,14 @@ namespace RethinkDb.Driver.Net.JsonConverters
             writer.WriteValue(Converter.Time);
             writer.WritePropertyName("epoch_time");
             DateTimeOffset dto;
-            if( value is DateTimeOffset )
+            if (value is DateTimeOffset)
             {
                 dto = (DateTimeOffset)value;
             }
             else //value is DateTime
             {
                 var dt = (DateTime)value;
-                if( dt == DateTime.MinValue )
+                if (dt == DateTime.MinValue)
                 { //Ugh. Make MinValue consistent cross-platform on Windows and Linux.
                   //See: https://github.com/dotnet/corefx/issues/9019
                   //     https://github.com/bchavez/RethinkDb.Driver/issues/66
@@ -55,12 +54,12 @@ namespace RethinkDb.Driver.Net.JsonConverters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if( reader.TokenType == JsonToken.Null )
+            if (reader.TokenType == JsonToken.Null)
             {
                 return null;
             }
 
-            if( reader.TokenType != JsonToken.StartObject )
+            if (reader.TokenType != JsonToken.StartObject)
             {
                 var msg = string.Join(" ",
                     $"The JSON representation of a DateTime/DateTimeOffset when parsing the server response is not a {Converter.PseudoTypeKey}:{Converter.Time} object.",
@@ -72,14 +71,14 @@ namespace RethinkDb.Driver.Net.JsonConverters
 
             reader.ReadAndAssertProperty(Converter.PseudoTypeKey);
             var reql_type = reader.ReadAsString();
-            if( reql_type != Converter.Time )
+            if (reql_type != Converter.Time)
             {
                 throw new JsonSerializationException($"Expected {Converter.PseudoTypeKey} should be {Converter.Time} but got {reql_type}.");
             }
 
             reader.ReadAndAssertProperty("epoch_time");
             var epoch_time = reader.ReadAsDouble();
-            if( epoch_time == null )
+            if (epoch_time == null)
             {
                 throw new JsonSerializationException($"The {Converter.PseudoTypeKey}:{Converter.Time} object doesn't have an epoch_time value.");
             }
@@ -91,8 +90,8 @@ namespace RethinkDb.Driver.Net.JsonConverters
             //one more post read to align out of { reql_type:TIME,  .... } 
             reader.ReadAndAssert();
 
-            if( objectType == typeof(DateTimeOffset) ||
-                objectType == typeof(DateTimeOffset?) )
+            if (objectType == typeof(DateTimeOffset) ||
+                objectType == typeof(DateTimeOffset?))
             {
                 return ConvertDateTimeOffset(epoch_time.Value, timezone);
             }

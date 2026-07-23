@@ -65,11 +65,11 @@ namespace RethinkDb.Driver.Ast
 
             queryArr.Add(Type);
 
-            if( Term != null )
+            if (Term != null)
             {
                 queryArr.Add(Term.Build());
             }
-            if( GlobalOptions != null )
+            if (GlobalOptions != null)
             {
                 queryArr.Add(ReqlAst.BuildOptarg(GlobalOptions));
             }

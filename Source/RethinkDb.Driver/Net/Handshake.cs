@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using Newtonsoft.Json.Linq;
+using System.IO;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json.Linq;
 
 namespace RethinkDb.Driver.Net
 {
@@ -47,7 +47,7 @@ namespace RethinkDb.Driver.Net
 
             public IProtocolState NextState(string response)
             {
-                if( response != null )
+                if (response != null)
                 {
                     throw new ReqlDriverError("Unexpected response");
                 }
@@ -115,7 +115,7 @@ namespace RethinkDb.Driver.Net
                 ThrowIfFailure(json);
                 long minVersion = json["min_protocol_version"].Value<long>();
                 long maxVersion = json["max_protocol_version"].Value<long>();
-                if( SubProtocolVersion < minVersion || SubProtocolVersion > maxVersion )
+                if (SubProtocolVersion < minVersion || SubProtocolVersion > maxVersion)
                 {
                     throw new ReqlDriverError(
                         "Unsupported protocol version " + SubProtocolVersion +
@@ -154,7 +154,7 @@ namespace RethinkDb.Driver.Net
                 ThrowIfFailure(json);
                 string serverFirstMessage = json["authentication"].Value<string>();
                 ScramAttributes serverAuth = ScramAttributes.From(serverFirstMessage);
-                if( !serverAuth.Nonce.StartsWith(nonce) )
+                if (!serverAuth.Nonce.StartsWith(nonce))
                 {
                     throw new ReqlAuthError("Invalid nonce from server");
                 }
@@ -239,7 +239,7 @@ namespace RethinkDb.Driver.Net
                     .From(json["authentication"].Value<string>());
 
 
-                if( !auth.ServerSignature.SequenceEqual(serverSignature) )
+                if (!auth.ServerSignature.SequenceEqual(serverSignature))
                 {
                     throw new ReqlAuthError("Invalid server signature");
                 }
@@ -275,10 +275,10 @@ namespace RethinkDb.Driver.Net
 
         static void ThrowIfFailure(JObject json)
         {
-            if( !json["success"].Value<bool>() )
+            if (!json["success"].Value<bool>())
             {
                 long errorCode = json["error_code"].Value<long>();
-                if( errorCode >= 10 && errorCode <= 20 )
+                if (errorCode >= 10 && errorCode <= 20)
                 {
                     throw new ReqlAuthError(json["error"].Value<string>());
                 }

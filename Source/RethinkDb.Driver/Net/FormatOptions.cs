@@ -26,7 +26,7 @@ namespace RethinkDb.Driver.Net
         /// Format options for JToken
         /// </summary>
         public FormatOptions()
-        {    
+        {
         }
 
         /// <summary>

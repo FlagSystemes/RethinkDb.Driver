@@ -1,10 +1,10 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
+using RethinkDb.Driver.Net;
 using System;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
-using RethinkDb.Driver.Net;
 
 namespace RethinkDb.Driver.Utils
 {
@@ -19,7 +19,7 @@ namespace RethinkDb.Driver.Utils
             {
                 task.Wait();
             }
-            catch( AggregateException ae )
+            catch (AggregateException ae)
             {
                 ExceptionDispatchInfo.Capture(ae.InnerException).Throw();
             }
@@ -32,7 +32,7 @@ namespace RethinkDb.Driver.Utils
             {
                 task.Wait();
             }
-            catch( AggregateException ae )
+            catch (AggregateException ae)
             {
                 ExceptionDispatchInfo.Capture(ae.InnerException).Throw();
             }

@@ -19,76 +19,77 @@
 #pragma warning disable 1591 // Missing XML comment for publicly visible type or member
 // ReSharper disable CheckNamespace
 
-using System;
-using RethinkDb.Driver.Ast;
 using RethinkDb.Driver.Model;
 using RethinkDb.Driver.Proto;
-using System.Collections;
-using System.Collections.Generic;
 
 
-namespace RethinkDb.Driver.Ast {
+namespace RethinkDb.Driver.Ast
+{
 
-    public partial class Downcase : ReqlExpr {
+    public partial class Downcase : ReqlExpr
+    {
 
-    
-    
-    
-/// <summary>
-/// <para>Lowercases a string.</para>
-/// </summary>
-/// <example><para>Example:</para>
-/// <code>r.expr("Sentence about LaTeX.").downcase().run(conn, callback)
-/// </code>
-/// <para>Result:</para>
-/// <code>"sentence about latex."
-/// </code>
-/// <para>Note: <code>upcase</code> and <code>downcase</code> only affect ASCII characters.</para></example>
-        public Downcase (object arg) : this(new Arguments(arg), null) {
+
+
+
+        /// <summary>
+        /// <para>Lowercases a string.</para>
+        /// </summary>
+        /// <example><para>Example:</para>
+        /// <code>r.expr("Sentence about LaTeX.").downcase().run(conn, callback)
+        /// </code>
+        /// <para>Result:</para>
+        /// <code>"sentence about latex."
+        /// </code>
+        /// <para>Note: <code>upcase</code> and <code>downcase</code> only affect ASCII characters.</para></example>
+        public Downcase(object arg) : this(new Arguments(arg), null)
+        {
         }
-/// <summary>
-/// <para>Lowercases a string.</para>
-/// </summary>
-/// <example><para>Example:</para>
-/// <code>r.expr("Sentence about LaTeX.").downcase().run(conn, callback)
-/// </code>
-/// <para>Result:</para>
-/// <code>"sentence about latex."
-/// </code>
-/// <para>Note: <code>upcase</code> and <code>downcase</code> only affect ASCII characters.</para></example>
-        public Downcase (Arguments args) : this(args, null) {
+        /// <summary>
+        /// <para>Lowercases a string.</para>
+        /// </summary>
+        /// <example><para>Example:</para>
+        /// <code>r.expr("Sentence about LaTeX.").downcase().run(conn, callback)
+        /// </code>
+        /// <para>Result:</para>
+        /// <code>"sentence about latex."
+        /// </code>
+        /// <para>Note: <code>upcase</code> and <code>downcase</code> only affect ASCII characters.</para></example>
+        public Downcase(Arguments args) : this(args, null)
+        {
         }
-/// <summary>
-/// <para>Lowercases a string.</para>
-/// </summary>
-/// <example><para>Example:</para>
-/// <code>r.expr("Sentence about LaTeX.").downcase().run(conn, callback)
-/// </code>
-/// <para>Result:</para>
-/// <code>"sentence about latex."
-/// </code>
-/// <para>Note: <code>upcase</code> and <code>downcase</code> only affect ASCII characters.</para></example>
-        public Downcase (Arguments args, OptArgs optargs)
-         : base(TermType.DOWNCASE, args, optargs) {
+        /// <summary>
+        /// <para>Lowercases a string.</para>
+        /// </summary>
+        /// <example><para>Example:</para>
+        /// <code>r.expr("Sentence about LaTeX.").downcase().run(conn, callback)
+        /// </code>
+        /// <para>Result:</para>
+        /// <code>"sentence about latex."
+        /// </code>
+        /// <para>Note: <code>upcase</code> and <code>downcase</code> only affect ASCII characters.</para></example>
+        public Downcase(Arguments args, OptArgs optargs)
+         : base(TermType.DOWNCASE, args, optargs)
+        {
         }
 
 
-    
 
 
 
-    
 
 
-    
 
-    
+
+
+
+
         /// <summary>
         /// Get a single field from an object. If called on a sequence, gets that field from every object in the sequence, skipping objects that lack it.
         /// </summary>
         /// <param name="bracket"></param>
         public new Bracket this[string bracket] => base[bracket];
-        
+
         /// <summary>
         /// Get the nth element of a sequence, counting from zero. If the argument is negative, count from the last element.
         /// </summary>
@@ -97,11 +98,11 @@ namespace RethinkDb.Driver.Ast {
         public new Bracket this[int bracket] => base[bracket];
 
 
-    
-
-    
 
 
-    
+
+
+
+
     }
 }

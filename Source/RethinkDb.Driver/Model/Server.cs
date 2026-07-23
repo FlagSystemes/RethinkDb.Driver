@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RethinkDb.Driver.Net;
+using System.Collections.Generic;
 
 namespace RethinkDb.Driver.Model
 {

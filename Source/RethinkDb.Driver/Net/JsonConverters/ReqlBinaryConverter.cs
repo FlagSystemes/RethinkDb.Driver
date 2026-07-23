@@ -1,7 +1,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-using System;
 using Newtonsoft.Json;
+using System;
 
 namespace RethinkDb.Driver.Net.JsonConverters
 {
@@ -20,12 +20,12 @@ namespace RethinkDb.Driver.Net.JsonConverters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if( reader.TokenType == JsonToken.Null )
+            if (reader.TokenType == JsonToken.Null)
             {
                 return null;
             }
 
-            if( reader.TokenType != JsonToken.StartObject )
+            if (reader.TokenType != JsonToken.StartObject)
             {
                 var msg = string.Join(" ",
                     $"The JSON representation of binary data (byte[]) when parsing the server response is not a {Converter.PseudoTypeKey}:{Converter.Binary} object.",
@@ -37,7 +37,7 @@ namespace RethinkDb.Driver.Net.JsonConverters
 
             reader.ReadAndAssertProperty(Converter.PseudoTypeKey);
             var reql_type = reader.ReadAsString();
-            if( reql_type != Converter.Binary )
+            if (reql_type != Converter.Binary)
             {
                 throw new JsonSerializationException($"Expected {Converter.PseudoTypeKey} should be {Converter.Binary} but got {reql_type}.");
             }
